@@ -1,74 +1,23 @@
 const express = require("express");
 
-const contacts = require("../../models/contacts");
+const {getAll, getById, add, removeById, updateById, updateFavoriteById} = require("../../controllers")
 
-const { RequestError, contactSchema } = require("../../helpers");
+// const contacts = require("../../models/contacts");
+
+// const { RequestError, contactSchema } = require("../../helpers");
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
-  try {
-    const result = await contacts.listContacts();
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.get("/", getAll);
 
-router.get("/:contactId", async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const result = await contacts.getContactById(contactId);
-    if (!result) {
-      throw RequestError(404, "Not found");
-    }
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.get("/:contactId", getById);
 
-router.post("/", async (req, res, next) => {
-  try {
-    const {error} = contactSchema.validate(req.body);
-    if(error) {
-      throw RequestError(400, error.message);
-    }
-    const result = await contacts.addContact(req.body);
-    res.status(201).json(result);
-} catch (error) {
-    next(error);
-}
-});
+router.post("/", add);
 
-router.delete("/:contactId", async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const result = await contacts.removeContact(contactId);
-    if (!result) {
-      throw RequestError(404, "Not found");
-    }
-    res.json({ message: "Contact deleted" });
-  } catch (error) {
-    next(error);
-  }
-});
+router.delete("/:contactId", removeById);
 
-router.put("/:contactId", async (req, res, next) => {
-  try {
-    const {error} = contactSchema.validate(req.body);
-    if(error) {
-      throw RequestError(400, error.message);
-    }
-    const { contactId } = req.params;
-    const result = await contacts.updateContact(contactId, req.body);
-    if(!result) {
-      throw RequestError(404, "Not found");
-    }
-    res.status(200).json(result)
-  } catch(error){
-    next(error)
-  }
-});
+router.put("/:contactId", updateById);
+
+router.patch('/:contactId/favorite', updateFavoriteById);
 
 module.exports = router;
