@@ -6,7 +6,12 @@ const { SECRET_KEY } = process.env;
 
 const authenticate = async (req, res, next) => {
     try {
-        const { authorization = "" } = req.headers;
+        const { authorization } = req.headers;
+        if (!req.headers['authorization']) {
+            return res.status(401).json({
+                message: 'Token needed',
+            });
+        }
         const [bearer, token] = authorization.split(" ");
         if (bearer !== "Bearer"){
             throw RequestError(401, "Not authorized")

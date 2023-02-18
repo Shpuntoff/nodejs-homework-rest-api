@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const Joi = require("joi");
 
 const emailRegexp = /^[\w.]+@[\w]+.[\w]+$/;
 
@@ -24,8 +25,24 @@ const userSchema = Schema({
   },
 },{ versionKey: false, timestamps: true });
 
+const registerSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+  password: Joi.string().min(6).max(12).required(),
+  repeatPassword: Joi.ref("password"),
+});
+
+const loginSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+  password: Joi.string().min(6).required(),
+});
+
 const User = model("user", userSchema);
+const schemas = {
+  registerSchema,
+  loginSchema,
+}
 
 module.exports = {
   User,
+  schemas
 };

@@ -1,11 +1,7 @@
 const RequestError = require("./RequestError");
-const contactSchema = require("./contactSchema");
-const favoriteSchema = require("./favoriteSchema");
-const userSchema = require("./userShema");
+const ctrlWrapper = require("./ctrlWrapper");
 
 module.exports = {
   RequestError,
-  contactSchema,
-  favoriteSchema,
-  userSchema
+  ctrlWrapper
 };
