@@ -1,5 +1,5 @@
 const { getAll, getById, add, removeById, updateById, updateFavoriteById } = require("./contactsControllers");
-const { register, login, logout, currentUser} = require("./usersConrollers");
+const { register, login, logout, currentUser, updateAvatar} = require("./usersConrollers");
 
 module.exports = {
   getAll,
@@ -11,5 +11,6 @@ module.exports = {
   register,
   login,
   logout,
-  currentUser
+  currentUser,
+  updateAvatar
 };
